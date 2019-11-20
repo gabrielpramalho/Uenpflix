@@ -17,6 +17,7 @@ typedef struct dado {
     int like;
     int dislike;
 } Filme;
+
 void titulo(){
     system("cls");
     printf(" _   _   _____   _    _   _____    _____   _       _   _     _     \n");
@@ -32,6 +33,7 @@ int verifica_id(){
     int id=0;
     Filme aux;
     FILE * arquivo = fopen(FILENAME, "rb");
+
     if(arquivo == NULL){
         printf("ERRO AO ABRIR O ARQUIVO!\n");
         exit(1);
@@ -39,15 +41,18 @@ int verifica_id(){
     while(fread(&aux, sizeof(Filme), 1, arquivo)){
         id = aux.id;
     }
+
     fclose(arquivo);
     return id;
 }
 
 void troca_dados(){
-    fclose(fopen(FILENAME, "wb"));
     Filme aux;
+
+    fclose(fopen(FILENAME, "wb"));
     FILE * arquivo = fopen(FILENAME, "ab");
     FILE * arquivo2 = fopen(FILENAME_AUX, "rb");
+
     if (arquivo == NULL || arquivo2 == NULL){
         printf("ERRO AO ABRIR O ARQUIVO!\n");
         exit(1);
@@ -55,6 +60,7 @@ void troca_dados(){
     while(fread(&aux, sizeof(Filme), 1, arquivo2)){
         fwrite(&aux, sizeof(Filme), 1, arquivo);
     }
+
     fclose(arquivo2);
     fclose(arquivo);
 }
@@ -63,10 +69,12 @@ int cadastrar(int id){
     int result;
     Filme aux;
     FILE * arquivo = fopen(FILENAME, "ab");
+
     if (arquivo == NULL){
         printf("ERRO AO ABRIR O ARQUIVO!\n");
         exit(1);
     }
+
     aux.id = id;
     printf("Titulo: ");
     fgets(aux.titulo, 50, stdin);
@@ -90,12 +98,14 @@ int cadastrar(int id){
     scanf("%d", &aux.dislike);
     result = fwrite(&aux, sizeof(Filme), 1, arquivo);
     fclose(arquivo);
+
     return result;
 }
 void listar(){
     titulo();
     Filme aux;
     FILE * arquivo = fopen(FILENAME, "rb");
+
     if (arquivo == NULL){
         printf("ERRO AO ABRIR O ARQUIVO!\n");
         exit(1);
@@ -120,6 +130,7 @@ void consultar(){
     Filme aux;
     int n, status = 0;
     FILE * arquivo = fopen(FILENAME, "rb");
+
     if (arquivo == NULL){
         printf("ERRO AO ABRIR O ARQUIVO!\n");
         exit(1);
@@ -133,7 +144,7 @@ void consultar(){
         }
     }
     if(status){
-        printf("Id: %d\n", aux.id);
+        printf("\nId: %d\n", aux.id);
         printf("Titulo: %s\n", aux.titulo);
         printf("Tipo: %s\n", aux.tipo);
         printf("Ano: %d\n", aux.ano);
@@ -141,28 +152,34 @@ void consultar(){
         printf("Classificacao indicativa: %d anos\n", aux.classificacao);
         printf("Duracao: %d minutos\n", aux.duracao);
         printf("Likes: %d\n", aux.like);
-        printf("Dislikes: %d\n", aux.dislike);
+        printf("Dislikes: %d\n\n", aux.dislike);
     }else{
-        printf("Registro nao encontrado!\n");
+        printf("\nRegistro nao encontrado!\n\n");
     }
+    system("pause");
 }
 void alterar(){
+    fclose(fopen(FILENAME_AUX, "wb"));
     titulo();
     Filme aux, aux2;
-    int n, status = 0, result;
+    int n, status = 0, result, flag=0;
     FILE * arquivo = fopen(FILENAME, "rb");
     FILE * arquivo2 = fopen(FILENAME_AUX, "ab");
+
     if (arquivo == NULL || arquivo2 == NULL){
         printf("ERRO AO ABRIR O ARQUIVO!\n");
         exit(1);
     }
+
     printf("Digite o ID desejado: ");
     scanf("%d", &n);
     getchar();
+
     while(fread(&aux, sizeof(Filme), 1, arquivo)){
         if(n == aux.id){
+            flag = 1;
             aux2.id = aux.id;
-            printf("Titulo: ");
+            printf("\nTitulo: ");
             fgets(aux2.titulo, 50, stdin);
             aux2.titulo[strlen(aux2.titulo) - 1] = '\0';
             printf("Tipo: ");
@@ -188,15 +205,24 @@ void alterar(){
             fwrite(&aux, sizeof(Filme), 1, arquivo2);
         }
     }
+
+    if(flag){
+        printf("\nRegistro alterado com sucesso!\n\n");
+    } else {
+        printf("\nRegistro nao encontrado!\n\n");
+    }
+
     fclose(arquivo2);
     fclose(arquivo);
     troca_dados();
+
+    system("pause");
 }
 void excluir(){
     titulo();
     fclose(fopen(FILENAME_AUX, "wb"));
     Filme aux, aux2;
-    int n, status = 0, result;
+    int n, status = 0, result, flag=0;
     FILE * arquivo = fopen(FILENAME, "rb");
     FILE * arquivo2 = fopen(FILENAME_AUX, "ab");
     if (arquivo == NULL || arquivo2 == NULL){
@@ -208,14 +234,22 @@ void excluir(){
     getchar();
     while(fread(&aux, sizeof(Filme), 1, arquivo)){
         if(n == aux.id){
+            flag = 1;
             continue;
-        }else{
+        } else {
             fwrite(&aux, sizeof(Filme), 1, arquivo2);
         }
+    }
+
+    if(flag){
+        printf("\nRegistro excluido com sucesso!\n\n");
+    } else {
+        printf("\nRegistro nao encontrado!\n\n");
     }
     fclose(arquivo2);
     fclose(arquivo);
     troca_dados();
+    system("pause");
 }
 
 
