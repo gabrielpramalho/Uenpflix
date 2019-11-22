@@ -1,0 +1,27 @@
+1
+As branquelas
+Filme
+2008
+Comedia
+16
+130
+100
+0
+1
+The walking dead
+Serie
+2010
+Apocalipse zumbi
+14
+50
+425
+10
+1
+Brooklyn 99
+Serie
+2013
+Comedia
+14
+22
+320
+3
