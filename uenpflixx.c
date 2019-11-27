@@ -162,7 +162,7 @@ void alterar(){
     fclose(fopen(FILENAME_AUX, "wb"));
     titulo();
     Filme aux, aux2;
-    int n, status = 0, result, flag=0;
+    int n, status = 0, result;
     FILE * arquivo = fopen(FILENAME, "rb");
     FILE * arquivo2 = fopen(FILENAME_AUX, "ab");
 
@@ -177,7 +177,6 @@ void alterar(){
 
     while(fread(&aux, sizeof(Filme), 1, arquivo)){
         if(n == aux.id){
-            flag = 1;
             aux2.id = aux.id;
             printf("\nTitulo: ");
             fgets(aux2.titulo, 50, stdin);
@@ -203,10 +202,11 @@ void alterar(){
             continue;
         }else{
             fwrite(&aux, sizeof(Filme), 1, arquivo2);
+            result = 0;
         }
     }
 
-    if(flag){
+    if(result){
         printf("\nRegistro alterado com sucesso!\n\n");
     } else {
         printf("\nRegistro nao encontrado!\n\n");
@@ -222,7 +222,7 @@ void excluir(){
     titulo();
     fclose(fopen(FILENAME_AUX, "wb"));
     Filme aux, aux2;
-    int n, status = 0, result, flag=0;
+    int n, status = 0, flag=0;
     FILE * arquivo = fopen(FILENAME, "rb");
     FILE * arquivo2 = fopen(FILENAME_AUX, "ab");
     if (arquivo == NULL || arquivo2 == NULL){
